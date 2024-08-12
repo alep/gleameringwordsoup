@@ -2589,7 +2589,13 @@ var IncompleteError = class extends CustomType {
   }
 };
 function all_directions() {
-  return toList([new Right(), new Down(), new RightDown()]);
+  return toList([
+    new Right(),
+    new Down(),
+    new RightDown(),
+    new Up(),
+    new Left()
+  ]);
 }
 function search(loop$gd, loop$words, loop$positions, loop$directions) {
   while (true) {
@@ -2726,8 +2732,11 @@ function main() {
       let _pipe = g$1;
       return fill(_pipe);
     } else {
+      let g$1 = $2[0][0];
+      let ws = $2[0][1];
       println("Did my best.");
-      return g;
+      let _pipe = g$1;
+      return fill(_pipe);
     }
   })();
   let app = element2(render(result));
@@ -2736,7 +2745,7 @@ function main() {
     throw makeError(
       "assignment_no_match",
       "gleameringwordsoup",
-      139,
+      137,
       "main",
       "Assignment pattern did not match",
       { value: $ }

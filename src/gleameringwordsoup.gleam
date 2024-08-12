@@ -15,7 +15,7 @@ pub type IncompleteError {
 }
 
 pub fn all_directions() -> List(grid.Direction) {
-  [grid.Right, grid.Down, grid.RightDown]
+  [grid.Right, grid.Down, grid.RightDown, grid.Up, grid.Left]
 }
 
 
@@ -46,8 +46,8 @@ pub fn search(gd: grid.Grid, words: List(List(String)), positions: List(Int), di
 } 
 
 
-
-
+// The following functions are just here to document the method I tried to 
+// make a full search for a possible solution
 pub fn make_triplet(x: a, y: b, zs: List(c), result: List(#(a, b, c))) -> List(#(a, b, c)) {
   case zs {
     [z, ..rest_zs] -> make_triplet(x, y, rest_zs, [#(x, y, z), ..result])
@@ -107,8 +107,6 @@ pub fn do_place_word(gd: grid.Grid, word: List(String), positions: List(Int), di
 
 
 pub fn render(grid: grid.Grid) -> element.Element(a) {
-
-
   let rows = list.range(0, grid.size - 1) 
     |> list.map(fn(elem) { html.td([], [element.text(unwrap(dict.get(grid.data, elem), ""))]) }) 
     |> list.sized_chunk(10)
@@ -129,9 +127,9 @@ pub fn main() {
   let w = words |> list.map(string.to_graphemes)
   let result = case g |> search(w, list.range(0, g.size - 1), all_directions()) {
     Ok(g) -> g |> grid.fill
-    Error(_) -> { 
+    Error(IncompleteError(g, ws)) -> { 
       io.println("Did my best.")
-      g
+      g |> grid.fill
     }
   }
 
